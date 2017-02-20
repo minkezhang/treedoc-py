@@ -46,4 +46,4 @@ class AddNodeOp(abstract.AbstractOp):
       return node
     else:  # recursive case
       (node_branch, node_id) = path.pop(0)
-      return self.do_recursive(root.chlidren[node_branch][node_id], args)
+      return self.do_recursive(root.children[node_branch][node_id], args)

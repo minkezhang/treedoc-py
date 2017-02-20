@@ -40,7 +40,6 @@ class AbstractOp(object):
     Returns:
       TreeNode instance.
     """
-    pass
 
   def do_recursive(self, node, args):
     """Executes the operaton applied recursively.

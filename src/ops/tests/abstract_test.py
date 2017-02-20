@@ -30,6 +30,24 @@ class _TrivialDualImplementOp(abstract.AbstractOp):
     return root
 
 
+class _TrivialSingleImplementOp(abstract.AbstractOp):
+  def do(self, root, args):
+    root.metadata['is_iterative'] = True
+    return root
+
+
+class TestSingleImplementOp(unittest.TestCase):
+  """Tests default executor routing behavior."""
+  def setUp(self):
+    self.n = tree.TreeNode((None, 'some-id'), 'some-data')
+
+  def testDoRecursive(self):
+    root = _TrivialSingleImplementOp()(self.n, {
+        'is_iterative': False,
+    })
+    self.assertEqual(self.n.metadata['is_iterative'], True)
+
+
 class TestReadOp(unittest.TestCase):
   def setUp(self):
     self.n = tree.TreeNode((None, 'some-id'), 'some-data')
@@ -59,3 +77,8 @@ class TestDualImplementOp(unittest.TestCase):
         'is_iterative': is_iterative,
     })
     self.assertEqual(self.n.metadata['is_iterative'], is_iterative)
+
+  def testDefaultExecutorPath(self):
+    """Tests the default op executor invokes the iterative solution."""
+    root = _TrivialDualImplementOp()(self.n)
+    self.assertEqual(self.n.metadata['is_iterative'], True)

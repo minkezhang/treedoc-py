@@ -56,6 +56,27 @@ class TestAddNodeOp(unittest.TestCase):
     self.assertEqual(child.id, 'child-id')
 
   @nose_parameterized.parameterized.expand([(True,), (False,)])
+  def testAddNodeNested(self, is_iterative):
+    """Tests adding nested node."""
+    child = add_node.AddNodeOp()(self.n, {
+        'path': [(tree.TreeNode.LEFT, 'child-id')],
+        'data': 'some-data',
+        'is_iterative': is_iterative,
+    })
+
+    grandchild = add_node.AddNodeOp()(self.n, {
+        'path': [(tree.TreeNode.LEFT, 'child-id'), (tree.TreeNode.LEFT, 'grandchild-id')],
+        'data': 'some-data',
+        'is_iterative': is_iterative,
+    })
+
+    self.assertEqual(len(child.children[tree.TreeNode.LEFT]), 1)
+    self.assertIn('grandchild-id', child.children[tree.TreeNode.LEFT])
+    self.assertEqual(child.children[tree.TreeNode.LEFT]['grandchild-id'], grandchild)
+    self.assertEqual(grandchild.data, 'some-data')
+    self.assertEqual(grandchild.id, 'grandchild-id')
+
+  @nose_parameterized.parameterized.expand([(True,), (False,)])
   def testAddNodeValueMultithreaded(self, is_iterative):
     """Tests expected behavior of multiple messages in flight."""
     n_threads = 1000
