@@ -9,7 +9,6 @@ from src.ops import add_node
 
 
 class TestAddNodeOp(unittest.TestCase):
-
   def setUp(self):
     self.n = tree.TreeNode((None, 'some-id'), 'some-data')
     self.assertEqual(len(self.n.children[tree.TreeNode.LEFT]), 0)
