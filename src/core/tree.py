@@ -16,6 +16,9 @@ class TreeNode(object):
           id is a unique client designator.
       data: Actual text data stored in this node (probably a string)
       parent: TreeNode instance link to the parent node.
+
+    Returns:
+      None
     """
 
     (self.parent_branch, self.id) = partial_path

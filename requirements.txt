@@ -1,2 +1,3 @@
-sortedcontainers
 nose
+nose_parameterized
+sortedcontainers
