@@ -2,8 +2,33 @@
 
 import abc
 
+from src.core import tree
+
+
 class AbstractOp(object):
+  """Base TreeNode operation class.
+
+  Classes can be called as:
+    SomeOp()(node, {
+      ...
+      'is_iterative': True,
+    })
+
+  Attributes:
+    is_read: Boolean expressing if the operation alters the TreeNode op.
+  """
+
   __metaclass__ = abc.ABCMeta
+
+  is_read = True
+
+  def _execute(self, f, *args, **kwargs):
+    if self.__class__.is_read:
+      with tree.RWLOCK.reader_lock():
+        return f(*args, **kwargs)
+    else:
+      with tree.RWLOCK.writer_lock():
+        return f(*args, **kwargs)
 
   @abc.abstractmethod
   def do(self, node, args):
@@ -40,9 +65,12 @@ class AbstractOp(object):
     Returns:
       TreeNode instance.
     """
+    if args is None:
+      args = {}
 
     is_iterative = args.pop('is_iterative', True)
+
     if is_iterative:
-      return self.do(node, args)
+      return self._execute(self.do, node, args)
     else:
-      return self.do_recursive(node, args)
+      return self._execute(self.do_recursive, node, args)

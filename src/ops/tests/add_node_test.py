@@ -1,5 +1,6 @@
 """Tests AddNodeOp TreeNode operation."""
 
+import threading
 import nose_parameterized
 import unittest
 
@@ -11,6 +12,8 @@ class TestAddNodeOp(unittest.TestCase):
 
   def setUp(self):
     self.n = tree.TreeNode((None, 'some-id'), 'some-data')
+    self.assertEqual(len(self.n.children[tree.TreeNode.LEFT]), 0)
+    self.assertEqual(len(self.n.children[tree.TreeNode.RIGHT]), 0)
 
   @nose_parameterized.parameterized.expand([(True,), (False,)])
   def testAddNodeInvalidNullPath(self, is_iterative):
@@ -51,3 +54,28 @@ class TestAddNodeOp(unittest.TestCase):
     self.assertEqual(self.n.children[tree.TreeNode.LEFT]['child-id'], child)
     self.assertEqual(child.data, 'some-data')
     self.assertEqual(child.id, 'child-id')
+
+  @nose_parameterized.parameterized.expand([(True,), (False,)])
+  def testAddNodeValueMultithreaded(self, is_iterative):
+    """Tests expected behavior of multiple messages in flight."""
+    n_threads = 1000
+    threads = []
+
+    t_ids = ['child-id-%04d' % t_id for t_id in xrange(n_threads)]
+
+    for t_id in xrange(n_threads):
+      t = threading.Thread(target=add_node.AddNodeOp(), args=(self.n, {
+        'path': [(tree.TreeNode.LEFT, t_ids[t_id])],
+        'data': 'some-data',
+        'is_iterative': is_iterative,
+      }))
+      threads.append(t)
+      t.start()
+
+    for t in threads:
+      t.join()
+
+    self.assertEqual(len(self.n.children[tree.TreeNode.LEFT]), n_threads)
+    self.assertEqual(len(self.n.children[tree.TreeNode.RIGHT]), 0)
+
+    self.assertEqual(list(self.n.children[tree.TreeNode.LEFT].keys()), t_ids)

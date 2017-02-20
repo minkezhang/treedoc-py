@@ -6,6 +6,9 @@ from src.ops import abstract
 
 
 class AddNodeOp(abstract.AbstractOp):
+  """Adds new TreeNode instance to the tree."""
+  is_read = False
+
   def do(self, root, args):
     (path, data) = (args.get('path', None), args.get('data', None))
 

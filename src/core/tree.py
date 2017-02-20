@@ -1,4 +1,9 @@
+import prwlock
+
 from src.core import iterable_dict
+
+
+RWLOCK = prwlock.RWLock()
 
 
 class TreeNode(object):
