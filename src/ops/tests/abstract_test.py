@@ -3,8 +3,6 @@
 import nose_parameterized
 import unittest
 
-from src.core import tree
-
 from src.ops import abstract
 
 
@@ -12,8 +10,7 @@ class _TrivialReadOp(abstract.AbstractOp):
   is_read = True
 
   def do(self, root, args):
-    root.metadata['is_read'] = self.__class__.is_read
-    return root
+    return self.__class__.is_read
 
 
 class _TrivialWriteOp(_TrivialReadOp):
@@ -22,63 +19,43 @@ class _TrivialWriteOp(_TrivialReadOp):
 
 class _TrivialDualImplementOp(abstract.AbstractOp):
   def do(self, root, args):
-    root.metadata['is_iterative'] = True
-    return root
+    return True  # is_iterative
 
   def do_recursive(self, root, args):
-    root.metadata['is_iterative'] = False
-    return root
+    return False
 
 
 class _TrivialSingleImplementOp(abstract.AbstractOp):
   def do(self, root, args):
-    root.metadata['is_iterative'] = True
-    return root
+    return 'is_iterative called'
 
 
 class TestSingleImplementOp(unittest.TestCase):
   """Tests default executor routing behavior."""
-  def setUp(self):
-    self.n = tree.TreeNode((None, 'some-id'), 'some-data')
-
   def testDoRecursive(self):
-    root = _TrivialSingleImplementOp()(self.n, {
+    self.assertEqual(_TrivialSingleImplementOp()(None, {
         'is_iterative': False,
-    })
-    self.assertEqual(self.n.metadata['is_iterative'], True)
+    }), 'is_iterative called')
 
 
 class TestReadOp(unittest.TestCase):
-  def setUp(self):
-    self.n = tree.TreeNode((None, 'some-id'), 'some-data')
-
   def testReadAttr(self):
-    root = _TrivialReadOp()(self.n, {})
-    self.assertEqual(self.n.metadata['is_read'], True)
+    self.assertEqual(_TrivialReadOp()(None, {}), True)
 
 
 class TestWriteOp(unittest.TestCase):
-  def setUp(self):
-    self.n = tree.TreeNode((None, 'some-id'), 'some-data')
-
-  def testWriteAttr(self):
-    root = _TrivialWriteOp()(self.n, {})
-    self.assertEqual(self.n.metadata['is_read'], False)
+  def testReadAttr(self):
+    self.assertEqual(_TrivialWriteOp()(None, {}), False)
 
 
 class TestDualImplementOp(unittest.TestCase):
-  def setUp(self):
-    self.n = tree.TreeNode((None, 'some-id'), 'some-data')
-
   @nose_parameterized.parameterized.expand([(True,), (False,)])
   def testOpExecutor(self, is_iterative):
     """Tests the op executor routes iterative and recursive calls correctly."""
-    root = _TrivialDualImplementOp()(self.n, {
+    self.assertEqual(_TrivialDualImplementOp()(None, {
         'is_iterative': is_iterative,
-    })
-    self.assertEqual(self.n.metadata['is_iterative'], is_iterative)
+    }), is_iterative)
 
   def testDefaultExecutorPath(self):
     """Tests the default op executor invokes the iterative solution."""
-    root = _TrivialDualImplementOp()(self.n)
-    self.assertEqual(self.n.metadata['is_iterative'], True)
+    self.assertEqual(_TrivialDualImplementOp()(None), True)
