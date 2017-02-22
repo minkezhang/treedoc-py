@@ -6,17 +6,6 @@ import unittest
 from src.ops import abstract
 
 
-class _TrivialReadOp(abstract.AbstractOp):
-  is_read = True
-
-  def do(self, root, args):
-    return self.__class__.is_read
-
-
-class _TrivialWriteOp(_TrivialReadOp):
-  is_read = False
-
-
 class _TrivialDualImplementOp(abstract.AbstractOp):
   def do(self, root, args):
     return True  # is_iterative
@@ -36,16 +25,6 @@ class TestSingleImplementOp(unittest.TestCase):
     self.assertEqual(_TrivialSingleImplementOp()(None, {
         'is_iterative': False,
     }), 'is_iterative called')
-
-
-class TestReadOp(unittest.TestCase):
-  def testReadAttr(self):
-    self.assertEqual(_TrivialReadOp()(None, {}), True)
-
-
-class TestWriteOp(unittest.TestCase):
-  def testReadAttr(self):
-    self.assertEqual(_TrivialWriteOp()(None, {}), False)
 
 
 class TestDualImplementOp(unittest.TestCase):

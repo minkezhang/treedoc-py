@@ -1,5 +1,4 @@
 coverage
 nose
 nose_parameterized
-prwlock
 sortedcontainers

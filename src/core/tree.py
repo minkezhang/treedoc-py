@@ -1,13 +1,18 @@
-import prwlock
+import threading
 
 from src.core import iterable_dict
 
 
-RWLOCK = prwlock.RWLock()
+LOCK = threading.RLock()
 
 
 class TreeNode(object):
-  """TreeDoc class definition."""
+  """TreeDoc class definition.
+
+  Attributes:
+    LEFT: Key signifying left child branch.
+    RIGHT: Key signifying right child branch.
+  """
 
   # branch constants
   LEFT = '0'

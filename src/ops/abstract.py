@@ -13,21 +13,12 @@ class AbstractOp(object):
       ...
       'is_iterative': True,
     })
-
-  Attributes:
-    is_read: Boolean expressing if the operation alters the TreeNode op.
   """
 
   __metaclass__ = abc.ABCMeta
 
-  is_read = True
-
   def _execute(self, f, *args, **kwargs):
-    if self.__class__.is_read:
-      with tree.RWLOCK.reader_lock():
-        return f(*args, **kwargs)
-    else:
-      with tree.RWLOCK.writer_lock():
+    with tree.LOCK:
         return f(*args, **kwargs)
 
   @abc.abstractmethod

@@ -4,6 +4,9 @@ from src.core import tree
 
 from src.ops import abstract
 
+# TODO(minkezhang): Reset L|R cache by invoking NextNode|PrevNode on newly
+# added node.
+
 
 class AddNodeOp(abstract.AbstractOp):
   """Adds new TreeNode instance to the tree."""
