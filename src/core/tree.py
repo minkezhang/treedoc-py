@@ -14,7 +14,6 @@ class TreeNode(object):
     RIGHT: Key signifying right child branch.
   """
 
-  # branch constants
   LEFT = '0'
   RIGHT = '1'
 
@@ -31,7 +30,7 @@ class TreeNode(object):
       None
     """
 
-    (self.parent_branch, self.id) = partial_path
+    (self._parent_branch, self._id) = partial_path
 
     if (self.parent_branch is not None and parent is None) or (
         self.parent_branch is None and parent is not None):
@@ -41,12 +40,12 @@ class TreeNode(object):
       raise ValueError('Invalid tree branch.')
 
     self.parent = parent
-    self.data = data
+    self._data = data
 
     #          N
     #      L /   \ R
     # [C, C, C] [C, C, C]
-    self.children = {
+    self._children = {
         TreeNode.LEFT: iterable_dict.IterableDict(),
         TreeNode.RIGHT: iterable_dict.IterableDict()
     }
@@ -54,8 +53,23 @@ class TreeNode(object):
     # User-space node metadata
     self.metadata = {}
 
-    self._next = None
-    self._prev = None
-
   def __len__(self):
     return len(self.data)
+
+  # read-only properties
+
+  @property
+  def children(self):
+    return self._children
+
+  @property
+  def data(self):
+    return self._data
+
+  @property
+  def id(self):
+    return self._id
+
+  @property
+  def parent_branch(self):
+    return self._parent_branch
