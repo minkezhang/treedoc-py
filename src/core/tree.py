@@ -51,7 +51,7 @@ class TreeNode(object):
     }
 
     # User-space node metadata
-    self.metadata = {}
+    self._metadata = {}
 
   def __len__(self):
     return len(self.data)
@@ -69,6 +69,10 @@ class TreeNode(object):
   @property
   def id(self):
     return self._id
+
+  @property
+  def metadata(self):
+    return self._metadata
 
   @property
   def parent_branch(self):
