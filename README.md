@@ -1,5 +1,16 @@
 # treedoc-py
 
+## TODO
+
+* Add PrevNodeOp
+* Clear NextNode, PrevNode when invoking AddNodeOp
+* Add DeleteNodeOp
+* Add ReadDataOp, take into consideration Node.is_deleted
+* Add GarbageCollectOp (delete nodes)
+* Add RebalanceOp (consolidate nodes)
+* Add ExplodeNodeOp (explode nodes)
+* Add SelectNodeOp (per-client basis, call ExplodeNodeOp)
+
 ## Installation
 
 ```
