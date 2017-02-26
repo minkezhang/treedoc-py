@@ -1,6 +1,5 @@
 """Tests the NextNode operation."""
 
-import threading
 import nose_parameterized
 import unittest
 

@@ -1,7 +1,5 @@
 """TreeNode operation to find next node."""
 
-import threading
-
 from src.core import tree
 
 from src.ops import abstract

@@ -5,7 +5,8 @@
 * Add PrevNodeOp
 * Clear NextNode, PrevNode when invoking AddNodeOp
 * Add DeleteNodeOp
-* Add ReadDataOp, take into consideration Node.is_deleted
+* Add ReadDataOp (take into consideration Node.is_deleted)
+* Add WriteDataOp (insert data into tree in a balanced manner)
 * Add GarbageCollectOp (delete nodes)
 * Add RebalanceOp (consolidate nodes)
 * Add ExplodeNodeOp (explode nodes)
