@@ -31,9 +31,9 @@ nosetests --cover-erase --with-coverage --cover-branches \
 
 ## Readings
 
-* Attiya *et al.*. Specification and Complexity of Collaborative Text Editing. 2016.
-* Burckhardt, Gotsman, Yang, and Zawirski. Replicated Data Types: Specification, Verification, Optimality. 2014.
-* Letia, Preguica, and Shapiro. Consistency Without Concurrency Control in Large, Dynamic Systems. 2010.
-* Preguica, Marques, Shapiro, and Letia. A Commutative Replicated Data Type for Coorperative Editing. 2009.
-* Shapiro, Preguica, Baquero, and Zawirski. A Comprehensive Study of Convergent and Commutative Replicated Data Types. 2011.
-* Shapiro, Preguica, Baquero, and Zawirski. Conflict-free Replicated Data Types. 2011.
+* **Attiya** *et al.*. Specification and Complexity of Collaborative Text Editing. *2016*.
+* **Burckhardt**, **Gotsman**, **Yang**, and **Zawirski**. Replicated Data Types: Specification, Verification, Optimality. *2014*.
+* **Letia**, **Preguica**, and **Shapiro**. Consistency Without Concurrency Control in Large, Dynamic Systems. *2010*.
+* **Preguica**, **Marques**, **Shapiro**, and **Letia**. A Commutative Replicated Data Type for Coorperative Editing. *2009*.
+* **Shapiro**, **Preguica**, **Baquero**, and **Zawirski**. A Comprehensive Study of Convergent and Commutative Replicated Data Types. *2011*.
+* **Shapiro**, **Preguica, **Baquero**, and **Zawirski**. Conflict-free Replicated Data Types. *2011*.
