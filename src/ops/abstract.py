@@ -13,6 +13,18 @@ class AbstractOp(object):
       ...
       'is_iterative': True,
     })
+
+  These operations do (Shapiro 2011, section 2.3.2):
+    1. execute atomically,
+    2. support nested calls,
+
+  These operations do not:
+    1. check Op preconditions,
+    2. execute downstream (i.e. network support),
+    3. store causual history (see section 4.1, Stability Problems),
+
+  We will need a wrapper around these operation calls to fulfill the full
+  CRDT specification.
   """
 
   __metaclass__ = abc.ABCMeta
