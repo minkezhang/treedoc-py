@@ -15,6 +15,30 @@ class TestAddNodeOp(unittest.TestCase):
     self.assertEqual(len(self.n.children[tree.TreeNode.RIGHT]), 0)
 
   @nose_parameterized.parameterized.expand([(True,), (False,)])
+  def testAddNodeUpdateCacheFirstNode(self, is_iterative):
+    """Tests newly added first node update neighbor nodes."""
+    child = add_node.AddNodeOp()(self.n, {
+        'path': [(tree.TreeNode.LEFT, 'child-id')],
+        'data': 'some-data',
+        'is_iterative': is_iterative,
+    })
+
+    self.assertEqual(child.metadata['next'], self.n)
+    self.assertEqual(self.n.metadata['prev'], child)
+
+  @nose_parameterized.parameterized.expand([(True,), (False,)])
+  def testAddNodeUpdateCacheLastNode(self, is_iterative):
+    """Tests newly added last leaf nodes update neighbor nodes."""
+    child = add_node.AddNodeOp()(self.n, {
+        'path': [(tree.TreeNode.RIGHT, 'child-id')],
+        'data': 'some-data',
+        'is_iterative': is_iterative,
+    })
+
+    self.assertEqual(child.metadata['prev'], self.n)
+    self.assertEqual(self.n.metadata['next'], child)
+
+  @nose_parameterized.parameterized.expand([(True,), (False,)])
   def testAddNodeInvalidNullPath(self, is_iterative):
     """Tests correct operation behavior when no path is provided."""
     with self.assertRaises(ValueError):

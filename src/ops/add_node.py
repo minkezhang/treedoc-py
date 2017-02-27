@@ -3,14 +3,29 @@
 from src.core import tree
 
 from src.ops import abstract
-
-# TODO(minkezhang): Reset L|R cache by invoking NextNode|PrevNode on newly
-# added node.
+from src.ops import prev_node
+from src.ops import next_node
 
 
 class AddNodeOp(abstract.AbstractOp):
   """Adds new TreeNode instance to the tree."""
   is_read = False
+
+  def _update_cache(self, node):
+    """Updates node neighbors' cache with newly inserted node."""
+
+    try:
+      prev = prev_node.PrevNodeOp()(node)
+      prev.metadata['next'] = node
+    except StopIteration:
+      pass
+
+    try:
+      next = next_node.NextNodeOp()(node)
+      next.metadata['prev'] = node
+    except StopIteration:
+      pass
+
 
   def do(self, root, args):
     (path, data) = (args.get('path', None), args.get('data', None))
@@ -29,6 +44,7 @@ class AddNodeOp(abstract.AbstractOp):
     node = tree.TreeNode((node_branch, node_id), data, root)
     root.children[node_branch][node_id] = node
 
+    self._update_cache(node)
     return node
 
   def do_recursive(self, root, args):
@@ -46,6 +62,7 @@ class AddNodeOp(abstract.AbstractOp):
       node = tree.TreeNode((node_branch, node_id), data, root)
       root.children[node_branch][node_id] = node
 
+      self._update_cache(node)
       return node
     else:  # recursive case
       (node_branch, node_id) = path.pop(0)
